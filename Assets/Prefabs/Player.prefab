@@ -96,7 +96,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5808359979094797201}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -167,7 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb13f1afb92156b4a969b77a062ac52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathSprite: {fileID: -168850165, guid: 3e043ee3ae08b904db629f5324099ce2, type: 3}
   speed: 8
   attackCooldown: 0.75
   maxHealth: 3
+  armor: 0
   projectile: {fileID: 1192635009002404008, guid: 8c0b21d64e9009741b0ab4b08e296c93, type: 3}

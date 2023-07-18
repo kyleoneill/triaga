@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour
 {
@@ -69,15 +71,20 @@ public class EnemyController : MonoBehaviour
 
     private void Move()
     {
-        Debug.Log("ENEMY MOVING");
+        // TODO: More complex moving logic then just a 50/50 to move left/right?
+        // TODO: How to handle walking into a wall or another enemy?
+        _locked = true;
         int direction = Random.Range(0, 2);
+        _animator.Play("Moving");
         if (direction == 0)
         {
             // Move left
+            _body.velocity = new Vector2(-0.3f, 0) * speed;
         }
         else
         {
             // Move right
+            _body.velocity = new Vector2(0.3f, 0) * speed;
         }
     }
 
@@ -96,26 +103,31 @@ public class EnemyController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.gameObject.CompareTag("Projectile"))
+        
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Projectile"))
         {
-            var projectileController = col.collider.gameObject.GetComponent<ProjectileController>();
+            var projectileController = other.gameObject.GetComponent<ProjectileController>();
             float damageToTake = projectileController.GetDamageDealt();
             DamageType damageType = projectileController.GetDamageType();
             if (damageType == DamageType.Physical)
             {
                 damageToTake -= armor;
             }
-            Destroy(col.collider.gameObject);
+            Destroy(other.gameObject);
             TakeDamage(damageToTake);
         }
     }
-    
+
     internal void TakeDamage(float damageToTake)
     {
         if (damageToTake <= 0) return;
         // TODO: Reconcile float damage vs int health
         _currentHealth -= (int)damageToTake;
-        if (_currentHealth >= 0)
+        if (_currentHealth <= 0)
         {
             // We don't want the enemy moving or trying to do anything while their death animation is playing
             _locked = true;
@@ -125,12 +137,20 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    // StopMoving is called by the end of the move animation
+    internal void StopMoving()
+    {
+        _body.velocity = new Vector2(0, 0);
+        Unlock();
+    }
+    
+    // Unlock is called by the end of the attack animation
     private void Unlock()
     {
         _locked = false;
-        Debug.Log("UNLOCKED ENEMY");
     }
     
+    // KillEnemy is called by the end of the death animation
     private void KillEnemy()
     {
         Destroy(gameObject);

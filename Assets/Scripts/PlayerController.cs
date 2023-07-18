@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _sr;
     private BoxCollider2D _boxCollider;
+    private bool _locked;
+    [SerializeField] private Sprite deathSprite;
 
     [SerializeField] private float speed = 8f;
     [SerializeField] private float attackCooldown = 0.75f;
@@ -20,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     private int _currentHealth;
     [SerializeField] private int maxHealth = 3;
+    [SerializeField] private int armor = 0;
 
     [SerializeField] private GameObject projectile;
     
@@ -32,13 +35,15 @@ public class PlayerController : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider2D>();
         _currentHealth = maxHealth;
         _attackController = gameObject.AddComponent<AttackController>();
+        _locked = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (_locked) return;
         PlayerMoveKeyboard();
-        AnimatePlayer();
+        AnimatePlayer();   
     }
 
     private void PlayerMoveKeyboard()
@@ -58,12 +63,42 @@ public class PlayerController : MonoBehaviour
             _animator.Play("Standing");
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    internal void TakeDamage(float damageToTake)
     {
-        if (col.collider.gameObject.CompareTag("Projectile"))
+        if (damageToTake <= 0 || _currentHealth <= 0) return;
+        // TODO: Reconcile float damage vs int health
+        _currentHealth -= (int)damageToTake;
+        Debug.Log(_currentHealth);
+        if (_currentHealth <= 0)
         {
-            Debug.Log("Player was hit with a projectile");
-            Destroy(col.collider.gameObject);
+            // We don't want the player moving or trying to do anything while their death animation is playing
+            _locked = true;
+            _body.velocity = new Vector2(0, 0);
+            
+            // The end of the death animation calls Die
+            _animator.Play("Die");
+        }
+    }
+
+    // Die is called at the end of the death animation
+    internal void Die()
+    {
+        _sr.sprite = deathSprite;
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Projectile"))
+        {
+            var projectileController = other.gameObject.GetComponent<ProjectileController>();
+            float damageToTake = projectileController.GetDamageDealt();
+            DamageType damageType = projectileController.GetDamageType();
+            if (damageType == DamageType.Physical)
+            {
+                damageToTake -= armor;
+            }
+            Destroy(other.gameObject);
+            TakeDamage(damageToTake);
         }
     }
 }
