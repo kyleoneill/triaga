@@ -25,7 +25,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int armor = 0;
 
     [SerializeField] private GameObject projectile;
-    
+
+    private HUDController _hudController;
+
+    private void Awake()
+    {
+        _currentHealth = maxHealth;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,8 +40,8 @@ public class PlayerController : MonoBehaviour
         _animator = GetComponent<Animator>();
         _sr = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
-        _currentHealth = maxHealth;
         _attackController = gameObject.AddComponent<AttackController>();
+        _hudController = GameObject.FindWithTag("hud").GetComponent<HUDController>();
         _locked = false;
     }
 
@@ -68,7 +75,7 @@ public class PlayerController : MonoBehaviour
         if (damageToTake <= 0 || _currentHealth <= 0) return;
         // TODO: Reconcile float damage vs int health
         _currentHealth -= (int)damageToTake;
-        Debug.Log(_currentHealth);
+        UpdateHealth();
         if (_currentHealth <= 0)
         {
             // We don't want the player moving or trying to do anything while their death animation is playing
@@ -78,6 +85,16 @@ public class PlayerController : MonoBehaviour
             // The end of the death animation calls Die
             _animator.Play("Die");
         }
+    }
+
+    internal int GetHealth()
+    {
+        return _currentHealth;
+    }
+
+    internal void UpdateHealth()
+    {
+        _hudController.SetHealthText(_currentHealth);
     }
 
     // Die is called at the end of the death animation
