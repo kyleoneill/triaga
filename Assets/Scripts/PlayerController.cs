@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private int _currentHealth;
     [SerializeField] private int maxHealth = 3;
     [SerializeField] private int armor = 0;
+    private int _rupeeCount;
 
     [SerializeField] private GameObject projectile;
 
@@ -42,6 +43,9 @@ public class PlayerController : MonoBehaviour
         _boxCollider = GetComponent<BoxCollider2D>();
         _attackController = gameObject.AddComponent<AttackController>();
         _hudController = GameObject.FindWithTag("hud").GetComponent<HUDController>();
+        _rupeeCount = 0;
+        _hudController.SetHealthText(_currentHealth);
+        _hudController.SetRupeeText(_rupeeCount);
         _locked = false;
     }
 

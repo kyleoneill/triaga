@@ -7,16 +7,17 @@ using UnityEngine;
 public class HUDController : MonoBehaviour
 {
     public static HUDController Instance;
-    private static GameObject _player;
-    private static PlayerController _playerController;
     private static GameObject _healthController;
     private static TextMeshProUGUI _healthText;
+    private static TextMeshProUGUI _rupeeText;
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            _healthText = gameObject.transform.Find("Health").gameObject.GetComponent<TextMeshProUGUI>();
+            _rupeeText = gameObject.transform.Find("Rupees").gameObject.GetComponent<TextMeshProUGUI>();
         }
         else
         {
@@ -27,15 +28,7 @@ public class HUDController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _player = GameObject.FindWithTag("Player");
-        if (_player != null)
-        {
-            _playerController = _player.GetComponent<PlayerController>();
-            _healthController = gameObject.transform.Find("Health").gameObject;
-            _healthText = _healthController.GetComponent<TextMeshProUGUI>();
-            int health = _playerController.GetHealth();
-            SetHealthText(health);
-        }
+
     }
 
     // Update is called once per frame
@@ -44,6 +37,11 @@ public class HUDController : MonoBehaviour
         
     }
 
+    internal void SetRupeeText(int numOfRupees)
+    {
+        _rupeeText.text = $"<sprite=\"items\" name=\"green-rupee\">   {numOfRupees}";
+    }
+    
     internal void SetHealthText(int health)
     {
         string healthText = "";

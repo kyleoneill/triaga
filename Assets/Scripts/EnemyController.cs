@@ -23,6 +23,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int armor = 0;
 
     [SerializeField] private GameObject projectile;
+    [SerializeField] private GameObject[] loot;
 
     private int _actionsTaken;
     private bool _locked;
@@ -129,14 +130,24 @@ public class EnemyController : MonoBehaviour
         _currentHealth -= (int)damageToTake;
         if (_currentHealth <= 0)
         {
-            // We don't want the enemy moving or trying to do anything while their death animation is playing
-            _locked = true;
-            
-            // The end of the explosion animation calls KillEnemy
-            _animator.Play("Explosion");
+            BeginDeath();
         }
     }
 
+    private void BeginDeath()
+    {
+        // We don't want the enemy moving or trying to do anything while their death animation is playing
+        _locked = true;
+        SpawnLoot();
+        // The end of the explosion animation calls KillEnemy
+        _animator.Play("Explosion");
+    }
+
+    private void SpawnLoot()
+    {
+        Instantiate(loot[0], gameObject.transform.position, Quaternion.identity);
+    }
+    
     // StopMoving is called by the end of the move animation
     internal void StopMoving()
     {
