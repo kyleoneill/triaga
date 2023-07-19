@@ -99,7 +99,7 @@ public class EnemyController : MonoBehaviour
     // This method is called halfway through the Shooting animation
     private void FireArrow()
     {
-        _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f);
+        _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f, false);
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -139,6 +139,7 @@ public class EnemyController : MonoBehaviour
         // We don't want the enemy moving or trying to do anything while their death animation is playing
         _locked = true;
         SpawnLoot();
+        // TODO: Should the collider be removed here? Currently the explosion animation still has a hitbox and eats arrows
         // The end of the explosion animation calls KillEnemy
         _animator.Play("Explosion");
     }

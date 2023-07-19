@@ -22,6 +22,7 @@ public class ProjectileController : MonoBehaviour
     [SerializeField] private float speed = 15f;
     [SerializeField] private DamageType dmgType;
     [SerializeField] private float damageDealt;
+    private bool _isFromPlayer;
     
     // Start is called before the first frame update
     void Start()
@@ -40,11 +41,12 @@ public class ProjectileController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void InstantiateProjectile(Vector3 parentPosition, float parentColliderSize, bool firingUp)
+    public void InstantiateProjectile(Vector3 parentPosition, float parentColliderSize, bool firingUp, bool isFromPlayer)
     {
         _body = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _sr = GetComponent<SpriteRenderer>();
+        _isFromPlayer = isFromPlayer;
 
         // Spawn the projectile either just above or below the GameObject firing it with accompanying velocity
         float colliderDistance = (_boxCollider.size.y / 2f + parentColliderSize / 2f) * 1.05f;
@@ -71,5 +73,19 @@ public class ProjectileController : MonoBehaviour
     internal DamageType GetDamageType()
     {
         return dmgType;
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // If a player hits a piece of loot with their arrow, de-spawn the loot and give it to the player
+        if (other.gameObject.CompareTag("loot") && _isFromPlayer)
+        {
+            // TODO: What if we want loot other than a rupee?
+            RupeeController rupeeController = other.gameObject.GetComponent<RupeeController>();
+            int rupeeValue = rupeeController.GetRupeeValue();
+            rupeeController.Despawn();
+            GameController gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+            gameController.UpdatePlayerRupees(rupeeValue);
+        }
     }
 }

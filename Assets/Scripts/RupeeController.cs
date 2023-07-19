@@ -69,6 +69,21 @@ public class RupeeController : MonoBehaviour
         }
     }
 
+    public int GetRupeeValue()
+    {
+        switch (_rupeeType)
+        {
+            case RupeeType.Green:
+                return 1;
+            case RupeeType.Blue:
+                return 5;
+            case RupeeType.Red:
+                return 20;
+            default:
+                return 0;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,7 +96,7 @@ public class RupeeController : MonoBehaviour
         _renderer.enabled = !_renderer.enabled;
     }
 
-    void Despawn()
+    public void Despawn()
     {
         CancelInvoke();
         Destroy(gameObject);

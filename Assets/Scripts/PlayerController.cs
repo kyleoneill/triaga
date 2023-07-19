@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         _movementX = Input.GetAxisRaw("Horizontal");
         // _movementY = Input.GetAxisRaw("Vertical");
         if (Input.GetKey("space") && _attackController.CanAttack())
-            _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, true, attackCooldown);
+            _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, true, attackCooldown, true);
         _body.velocity = new Vector2(_movementX, 0) * speed;
     }
 
@@ -78,8 +78,7 @@ public class PlayerController : MonoBehaviour
     {
         if (damageToTake <= 0 || _currentHealth <= 0) return;
         // TODO: Reconcile float damage vs int health
-        _currentHealth -= (int)damageToTake;
-        UpdateHealth();
+        UpdateHealth((int)damageToTake);
         if (_currentHealth <= 0)
         {
             // We don't want the player moving or trying to do anything while their death animation is playing
@@ -96,9 +95,16 @@ public class PlayerController : MonoBehaviour
         return _currentHealth;
     }
 
-    internal void UpdateHealth()
+    internal void UpdateHealth(int damageToTake)
     {
+        _currentHealth -= damageToTake;
         _hudController.SetHealthText(_currentHealth);
+    }
+
+    internal void UpdateRupees(int amountToAdd)
+    {
+        _rupeeCount += amountToAdd;
+        _hudController.SetRupeeText(_rupeeCount);
     }
 
     // Die is called at the end of the death animation

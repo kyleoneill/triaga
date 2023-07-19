@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
     public static string CurrentScene;
+    public GameObject player;
+    public PlayerController playerController;
 
     private void Awake()
     {
@@ -25,12 +27,18 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player");
+        playerController = player.GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void UpdatePlayerRupees(int amountToAdd)
+    {
+        playerController.UpdateRupees(amountToAdd);
     }
 }

@@ -18,11 +18,11 @@ public class AttackController : MonoBehaviour
         return _attackState == AttackState.NotAttacking;
     }
     
-    public void ProjectileAttack(GameObject projectile, Vector3 position, float boxColliderSize, bool firingUp, float attackCooldown)
+    public void ProjectileAttack(GameObject projectile, Vector3 position, float boxColliderSize, bool firingUp, float attackCooldown, bool isFromPlayer)
     {
         var newProjectile = Instantiate(projectile, position, Quaternion.identity);
         ProjectileController projectileController = newProjectile.GetComponent<ProjectileController>();
-        projectileController.InstantiateProjectile(position, boxColliderSize, firingUp);
+        projectileController.InstantiateProjectile(position, boxColliderSize, firingUp, isFromPlayer);
         if (attackCooldown == 0f) return;
         _attackState = AttackState.Cooldown;
         Invoke(nameof(ResetAttack), attackCooldown);
