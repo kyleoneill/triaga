@@ -79,6 +79,10 @@ public class PlayerController : MonoBehaviour
         if (damageToTake <= 0 || _currentHealth <= 0) return;
         // TODO: Reconcile float damage vs int health
         UpdateHealth((int)damageToTake);
+        
+        // TODO: There should be an invulnerability window here where the player cannot be damaged again
+        // TODO: Play blink animation or something until invulnerability ends
+        
         if (_currentHealth <= 0)
         {
             // We don't want the player moving or trying to do anything while their death animation is playing

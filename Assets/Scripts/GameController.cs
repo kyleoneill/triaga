@@ -59,14 +59,16 @@ public class GameController : MonoBehaviour
             player.transform.position = playerSpawner.transform.position;
             playerController = player.GetComponent<PlayerController>();
 
-            _sceneController = GameObject.FindWithTag("SceneController").GetComponent<SceneController>();
-            
             // After the player is spawned, set up the camera
             Camera camera = Camera.main;
             if (camera == null) return;
             _cameraController = camera.GetComponent<CameraController>();
             if (_cameraController == null) return;
             _cameraController.InstantiateCamera();
+            
+            // After the player and camera are set up, begin the scene
+            _sceneController = GameObject.FindWithTag("SceneController").GetComponent<SceneController>();
+            _sceneController.StartScene();
         }
     }
 

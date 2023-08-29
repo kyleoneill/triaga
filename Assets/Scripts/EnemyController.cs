@@ -138,14 +138,19 @@ public class EnemyController : MonoBehaviour
     {
         // We don't want the enemy moving or trying to do anything while their death animation is playing
         _locked = true;
+        _body.velocity = new Vector2(0, 0);
+        
+        // Delete our collider, this stops the explosion animation from eating arrows and BeginDeath from being called
+        // while the enemy is already dying (and spawning multiple loot instances)
+        Destroy(_boxCollider);
+        
         SpawnLoot();
-        // TODO: Should the collider be removed here? Currently the explosion animation still has a hitbox and eats arrows
-        // The end of the explosion animation calls KillEnemy
         _animator.Play("Explosion");
     }
 
     private void SpawnLoot()
     {
+        // TODO: An enemy should not always drop loot, there should be a chance roll here
         Instantiate(loot[0], gameObject.transform.position, Quaternion.identity);
     }
     
@@ -165,6 +170,8 @@ public class EnemyController : MonoBehaviour
     // KillEnemy is called by the end of the death animation
     private void KillEnemy()
     {
+        SceneController sceneController = GameObject.FindWithTag("SceneController").GetComponent<SceneController>();
+        sceneController.KillEnemy();
         Destroy(gameObject);
     }
 }

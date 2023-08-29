@@ -170,7 +170,7 @@ MonoBehaviour:
   speed: 8
   attackCooldown: 0.75
   actionCooldown: 1
-  maxHealth: 1
+  maxHealth: 3
   armor: 0
   projectile: {fileID: 1192635009002404008, guid: 8c0b21d64e9009741b0ab4b08e296c93, type: 3}
   loot:
