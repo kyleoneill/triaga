@@ -84,8 +84,8 @@ public class ProjectileController : MonoBehaviour
             RupeeController rupeeController = other.gameObject.GetComponent<RupeeController>();
             int rupeeValue = rupeeController.GetRupeeValue();
             rupeeController.Despawn();
-            GameController gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
-            gameController.UpdatePlayerRupees(rupeeValue);
+            PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            player.UpdateRupees(rupeeValue);
         }
     }
 }

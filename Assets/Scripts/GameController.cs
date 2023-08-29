@@ -23,7 +23,6 @@ public class GameController : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             
-            // TODO: There _has_ to be a better way to store and reference this information
             InstantiateSceneCollection();
             
             // Run scene instantiation logic
@@ -38,8 +37,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        playerController = player.GetComponent<PlayerController>();
+
     }
 
     // Update is called once per frame
@@ -59,6 +57,7 @@ public class GameController : MonoBehaviour
             if (playerSpawner == null) return;
             player = Instantiate(playerPrefab);
             player.transform.position = playerSpawner.transform.position;
+            playerController = player.GetComponent<PlayerController>();
 
             // After the player is spawned, set up the camera
             Camera camera = Camera.main;
@@ -69,14 +68,10 @@ public class GameController : MonoBehaviour
             
         }
     }
-    
-    public void UpdatePlayerRupees(int amountToAdd)
-    {
-        playerController.UpdateRupees(amountToAdd);
-    }
 
     private static void InstantiateSceneCollection()
     {
+        // TODO: There _has_ to be a better way to store and reference this information
         _gameScenes = new String[1];
         _gameScenes[0] = "LevelOne";
     }
