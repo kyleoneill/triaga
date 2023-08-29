@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - hud
   - loot
+  - PlayerSpawner
   layers:
   - Default
   - TransparentFX
