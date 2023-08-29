@@ -12,6 +12,8 @@ public class SceneController : MonoBehaviour
     private int _currentEnemyCount;
     private Random _random;
     private GameObject[] _enemySpawners;
+    private HUDController _hudController;
+    private int _totalEnemiesKilled;
     
     // Start is called before the first frame update
     void Start()
@@ -56,10 +58,17 @@ public class SceneController : MonoBehaviour
     public void KillEnemy()
     {
         _currentEnemyCount -= 1;
+        // TODO: This increments score when an enemy kills another enemy
+        // Need to use some other way to record killing an enemy as only the player
+        _totalEnemiesKilled += 1;
+        _hudController.SetScoreText(_totalEnemiesKilled);
     }
     
     public void StartScene()
     {
+        _hudController = GameObject.FindWithTag("hud").GetComponent<HUDController>();
+        _totalEnemiesKilled = 0;
+        _hudController.SetScoreText(_totalEnemiesKilled);
         _currentEnemyCount = 0;
         _enemySpawners = GameObject.FindGameObjectsWithTag("EnemySpawner");
         // TODO: Need seed rotation or something here

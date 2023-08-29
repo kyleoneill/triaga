@@ -10,6 +10,7 @@ public class HUDController : MonoBehaviour
     private static GameObject _healthController;
     private static TextMeshProUGUI _healthText;
     private static TextMeshProUGUI _rupeeText;
+    private static TextMeshProUGUI _scoreText;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class HUDController : MonoBehaviour
             Instance = this;
             _healthText = gameObject.transform.Find("Health").gameObject.GetComponent<TextMeshProUGUI>();
             _rupeeText = gameObject.transform.Find("Rupees").gameObject.GetComponent<TextMeshProUGUI>();
+            _scoreText = gameObject.transform.Find("Score").gameObject.GetComponent<TextMeshProUGUI>();
         }
         else
         {
@@ -50,5 +52,10 @@ public class HUDController : MonoBehaviour
             healthText += "<sprite name=\"heart\"> ";
         }
         _healthText.text = healthText;
+    }
+
+    internal void SetScoreText(int score)
+    {
+        _scoreText.text = $"Score: {score}";
     }
 }
