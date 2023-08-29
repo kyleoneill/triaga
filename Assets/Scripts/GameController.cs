@@ -9,11 +9,11 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
     public static string CurrentScene;
+    private SceneController _sceneController;
     [SerializeField] private GameObject playerPrefab;
     public GameObject player;
     public PlayerController playerController;
     private static String[] _gameScenes;
-
     private CameraController _cameraController;
 
     private void Awake()
@@ -59,13 +59,14 @@ public class GameController : MonoBehaviour
             player.transform.position = playerSpawner.transform.position;
             playerController = player.GetComponent<PlayerController>();
 
+            _sceneController = GameObject.FindWithTag("SceneController").GetComponent<SceneController>();
+            
             // After the player is spawned, set up the camera
             Camera camera = Camera.main;
             if (camera == null) return;
             _cameraController = camera.GetComponent<CameraController>();
             if (_cameraController == null) return;
             _cameraController.InstantiateCamera();
-            
         }
     }
 

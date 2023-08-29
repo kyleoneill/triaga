@@ -9,6 +9,7 @@ TagManager:
   - hud
   - loot
   - PlayerSpawner
+  - SceneController
   layers:
   - Default
   - TransparentFX
