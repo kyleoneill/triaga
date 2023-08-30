@@ -4,40 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MobController
 {
-    // TODO: There is a lot of overlap between this stuff and the player. Might want some sort of common class they both inherit from
-    private Rigidbody2D _body;
-    private Animator _animator;
-    private SpriteRenderer _sr;
-    private BoxCollider2D _boxCollider;
-
-    [SerializeField] private float speed = 8f;
-    [SerializeField] private float attackCooldown = 0.75f;
     [SerializeField] private float actionCooldown = 1f;
     
     private AttackController _attackController;
     
-    private int _currentHealth;
-    [SerializeField] private int maxHealth = 1;
-    [SerializeField] private int armor = 0;
-
-    [SerializeField] private GameObject projectile;
     [SerializeField] private GameObject[] loot;
 
     private int _actionsTaken;
-    private bool _locked;
 
+    private void Awake()
+    {
+        // Run the Awake logic for the parent class
+        SharedAwake();
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
-        _body = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
-        _sr = GetComponent<SpriteRenderer>();
-        _boxCollider = GetComponent<BoxCollider2D>();
-        _currentHealth = maxHealth;
+        // Run the Start logic for the parent class
+        SharedStart();
+        
         _attackController = gameObject.AddComponent<AttackController>();
-        _locked = false;
         _actionsTaken = 0;
     }
 
@@ -102,50 +91,19 @@ public class EnemyController : MonoBehaviour
         _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f, false);
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    protected override void BeginDeath()
     {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Projectile"))
-        {
-            var projectileController = other.gameObject.GetComponent<ProjectileController>();
-            float damageToTake = projectileController.GetDamageDealt();
-            DamageType damageType = projectileController.GetDamageType();
-            if (damageType == DamageType.Physical)
-            {
-                damageToTake -= armor;
-            }
-            Destroy(other.gameObject);
-            TakeDamage(damageToTake);
-        }
-    }
-
-    internal void TakeDamage(float damageToTake)
-    {
-        if (damageToTake <= 0) return;
-        // TODO: Reconcile float damage vs int health
-        _currentHealth -= (int)damageToTake;
-        if (_currentHealth <= 0)
-        {
-            BeginDeath();
-        }
-    }
-
-    private void BeginDeath()
-    {
-        // We don't want the enemy moving or trying to do anything while their death animation is playing
-        _locked = true;
-        _body.velocity = new Vector2(0, 0);
-        
         // Delete our collider, this stops the explosion animation from eating arrows and BeginDeath from being called
         // while the enemy is already dying (and spawning multiple loot instances)
         Destroy(_boxCollider);
         
         SpawnLoot();
         _animator.Play("Explosion");
+    }
+
+    protected override void OverrideTakeDamage()
+    {
+        return;
     }
 
     private void SpawnLoot()
