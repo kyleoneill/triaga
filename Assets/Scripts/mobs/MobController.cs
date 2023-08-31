@@ -122,10 +122,12 @@ public class MobController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Projectile"))
         {
-            // TODO: On the projectile controller, need to store some sort of IFF info
-            //   which I guess is set when creating the projectile?
-            //   So players/enemies don't get hurt by a projectile from their "team"
             var projectileController = other.gameObject.GetComponent<ProjectileController>();
+            
+            // We don't want enemies to be shooting each other
+            if (!projectileController.IsFromPlayer() && !_isPlayer)
+                return;
+            
             float damageToTake = projectileController.GetDamageDealt();
             DamageType damageType = projectileController.GetDamageType();
             if (damageType == DamageType.Physical)

@@ -65,6 +65,11 @@ public class ProjectileController : MonoBehaviour
         transform.position = spawnPosition;
     }
 
+    internal bool IsFromPlayer()
+    {
+        return _isFromPlayer;
+    }
+    
     internal float GetDamageDealt()
     {
         return damageDealt;
