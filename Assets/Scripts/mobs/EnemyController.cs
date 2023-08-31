@@ -11,6 +11,7 @@ public class EnemyController : MobController
     [SerializeField] private GameObject[] loot;
 
     private int _actionsTaken;
+    [SerializeField] private int score = 10;
 
     private void Awake()
     {
@@ -122,7 +123,7 @@ public class EnemyController : MobController
     private void KillEnemy()
     {
         SceneController sceneController = GameObject.FindWithTag("SceneController").GetComponent<SceneController>();
-        sceneController.KillEnemy();
+        sceneController.KillEnemy(score);
         Destroy(gameObject);
     }
 }
