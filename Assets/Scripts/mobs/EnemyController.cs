@@ -8,8 +8,6 @@ public class EnemyController : MobController
 {
     [SerializeField] private float actionCooldown = 1f;
     
-    private AttackController _attackController;
-    
     [SerializeField] private GameObject[] loot;
 
     private int _actionsTaken;
@@ -18,6 +16,7 @@ public class EnemyController : MobController
     {
         // Run the Awake logic for the parent class
         SharedAwake();
+        _isPlayer = false;
     }
     
     // Start is called before the first frame update
@@ -26,7 +25,6 @@ public class EnemyController : MobController
         // Run the Start logic for the parent class
         SharedStart();
         
-        _attackController = gameObject.AddComponent<AttackController>();
         _actionsTaken = 0;
     }
 
@@ -82,13 +80,8 @@ public class EnemyController : MobController
     {
         // Lock the enemy so the attack animation can play. The Unlock method is called at the end of the Shooting animation
         _locked = true;
+        // The Shooting animation, when halfway done, calls the parent FireProjectile method
         _animator.Play("Shooting");
-    }
-
-    // This method is called halfway through the Shooting animation
-    private void FireArrow()
-    {
-        _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f, false);
     }
 
     protected override void BeginDeath()

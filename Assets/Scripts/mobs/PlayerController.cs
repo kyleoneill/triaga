@@ -13,8 +13,6 @@ public class PlayerController : MobController
     // Control player velocity
     private float _movementX, _movementY;
     
-    private AttackController _attackController;
-    
     // Player inventory
     private int _rupeeCount;
     
@@ -25,6 +23,7 @@ public class PlayerController : MobController
     {
         // Run the Awake logic for the parent class
         SharedAwake();
+        _isPlayer = true;
     }
 
     // Start is called before the first frame update
@@ -33,7 +32,6 @@ public class PlayerController : MobController
         // Run the Start logic for the parent class
         SharedStart();
         
-        _attackController = gameObject.AddComponent<AttackController>();
         _hudController = GameObject.FindWithTag("hud").GetComponent<HUDController>();
         _rupeeCount = 0;
         _hudController.SetHealthText(_currentHealth);
@@ -52,8 +50,8 @@ public class PlayerController : MobController
     {
         _movementX = Input.GetAxisRaw("Horizontal");
         // _movementY = Input.GetAxisRaw("Vertical");
-        if (Input.GetKey("space") && _attackController.CanAttack())
-            _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, true, attackCooldown, true);
+        if (Input.GetKey("space") && CanAttack())
+            FireProjectile();
         _body.velocity = new Vector2(_movementX, 0) * speed;
     }
 

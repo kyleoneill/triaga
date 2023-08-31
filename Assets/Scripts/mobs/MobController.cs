@@ -3,6 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AttackState
+{
+    NotAttacking,
+    Attack,
+    Cooldown
+}
+
 public class MobController : MonoBehaviour
 {
     // Component stuff
@@ -17,6 +24,7 @@ public class MobController : MonoBehaviour
     // Attacking
     [SerializeField] protected float attackCooldown = 0.75f;
     [SerializeField] protected GameObject projectile;
+    protected AttackState _attackState;
     
     // Health and dealing with damage
     protected int _currentHealth;
@@ -25,10 +33,12 @@ public class MobController : MonoBehaviour
     
     // Ability to do stuff
     protected bool _locked;
+    protected bool _isPlayer;
 
     protected void SharedAwake()
     {
         _currentHealth = maxHealth;
+        _attackState = AttackState.NotAttacking;
     }
     
     protected void SharedStart()
@@ -52,6 +62,30 @@ public class MobController : MonoBehaviour
         
     }
 
+    protected void FireProjectile()
+    {
+        // GameObject projectile, Vector3 position, float boxColliderSize, bool firingUp, float attackCooldown, bool isFromPlayer
+        // _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f, false);
+        var newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+        ProjectileController projectileController = newProjectile.GetComponent<ProjectileController>();
+        // TODO: Will the player ever fire down, will NPCs ever fire up? Can firingUp be removed and we just use isPlayer instead?
+        bool firingUp = _isPlayer;
+        projectileController.InstantiateProjectile(transform.position, _boxCollider.size.y, firingUp, _isPlayer);
+        if (attackCooldown == 0f) return;
+        _attackState = AttackState.Cooldown;
+        Invoke(nameof(ResetAttack), attackCooldown);
+    }
+    
+    protected void ResetAttack()
+    {
+        _attackState = AttackState.NotAttacking;
+    }
+    
+    public bool CanAttack()
+    {
+        return _attackState == AttackState.NotAttacking;
+    }
+    
     protected virtual void BeginDeath()
     {
         throw new NotImplementedException();
