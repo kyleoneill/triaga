@@ -91,11 +91,8 @@ public class MobController : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    protected virtual void OverrideTakeDamage()
+    protected virtual void UpdateHealthUI()
     {
-        // TODO: Is this a bad way to handle this type of problem?
-        // Issue here is that when TakeDamage is called I need the player to update the UI with their new health
-        // but enemies don't need to do anything here
         throw new NotImplementedException();
     }
     
@@ -103,8 +100,9 @@ public class MobController : MonoBehaviour
     {
         if (damageToTake <= 0 || _currentHealth <= 0) return;
         // TODO: Reconcile float damage vs int health
-        _currentHealth -= (int)damageToTake;
-        OverrideTakeDamage();
+        int newHealth = _currentHealth - (int)damageToTake;
+        _currentHealth = newHealth < 0 ? 0 : newHealth;
+        UpdateHealthUI();
         
         // TODO: There should be an invulnerability window here where the entity cannot be damaged again
         // TODO: Play a blink animation or something until the invulnerability window ends
@@ -116,6 +114,13 @@ public class MobController : MonoBehaviour
             _body.velocity = new Vector2(0, 0);
             BeginDeath();
         }
+    }
+
+    internal void Heal(int amountToHeal)
+    {
+        int newHealth = _currentHealth + amountToHeal;
+        _currentHealth = newHealth > maxHealth ? maxHealth : newHealth;
+        UpdateHealthUI();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -69,7 +69,7 @@ public class PlayerController : MobController
         _animator.Play("Die");
     }
 
-    protected override void OverrideTakeDamage()
+    protected override void UpdateHealthUI()
     {
         _hudController.SetHealthText(_currentHealth);
     }

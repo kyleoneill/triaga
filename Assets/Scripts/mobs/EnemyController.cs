@@ -95,7 +95,7 @@ public class EnemyController : MobController
         _animator.Play("Explosion");
     }
 
-    protected override void OverrideTakeDamage()
+    protected override void UpdateHealthUI()
     {
         return;
     }
@@ -103,7 +103,9 @@ public class EnemyController : MobController
     private void SpawnLoot()
     {
         // TODO: An enemy should not always drop loot, there should be a chance roll here
-        Instantiate(loot[0], gameObject.transform.position, Quaternion.identity);
+        int i = Random.Range(0, loot.Length);
+        var item = Instantiate(loot[i], gameObject.transform.position, Quaternion.identity);
+        item.name = loot[i].name;
     }
     
     // StopMoving is called by the end of the move animation

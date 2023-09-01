@@ -85,12 +85,22 @@ public class ProjectileController : MonoBehaviour
         // If a player hits a piece of loot with their arrow, de-spawn the loot and give it to the player
         if (other.gameObject.CompareTag("loot") && _isFromPlayer)
         {
-            // TODO: What if we want loot other than a rupee?
-            RupeeController rupeeController = other.gameObject.GetComponent<RupeeController>();
-            int rupeeValue = rupeeController.GetRupeeValue();
-            rupeeController.Despawn();
             PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-            player.UpdateRupees(rupeeValue);
+            switch (other.gameObject.name)
+            {
+                case "Rupee":
+                    RupeeController rupeeController = other.gameObject.GetComponent<RupeeController>();
+                    int rupeeValue = rupeeController.GetRupeeValue();
+                    rupeeController.Despawn();
+                    player.UpdateRupees(rupeeValue);
+                    break;
+                case "Heart":
+                    player.Heal(1);
+                    Destroy(other.gameObject);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
