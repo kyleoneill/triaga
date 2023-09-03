@@ -123,6 +123,11 @@ public class MobController : MonoBehaviour
         UpdateHealthUI();
     }
 
+    internal bool IsMaxHealth()
+    {
+        return _currentHealth == maxHealth;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Projectile"))

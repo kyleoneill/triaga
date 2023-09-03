@@ -102,6 +102,9 @@ public class EnemyController : MobController
 
     private void SpawnLoot()
     {
+        // TODO: Need logic for non-rupee loot to disappear
+        // Might need to refactor RupeeController into a generic LootController and roll rupee
+        // logic into it. Need overlapping logic, like flashing when about to de-spawn and then de-spawning
         // TODO: An enemy should not always drop loot, there should be a chance roll here
         int i = Random.Range(0, loot.Length);
         var item = Instantiate(loot[i], gameObject.transform.position, Quaternion.identity);

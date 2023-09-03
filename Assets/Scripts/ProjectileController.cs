@@ -95,8 +95,11 @@ public class ProjectileController : MonoBehaviour
                     player.UpdateRupees(rupeeValue);
                     break;
                 case "Heart":
-                    player.Heal(1);
-                    Destroy(other.gameObject);
+                    if (!player.IsMaxHealth())
+                    {
+                        player.Heal(1);
+                        Destroy(other.gameObject);
+                    }
                     break;
                 default:
                     break;
