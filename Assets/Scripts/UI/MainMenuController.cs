@@ -16,29 +16,35 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private GameObject cursor;
     private GameObject _cursorObj;
-
+    private Rigidbody2D _cursorRigidbody;
     private MainMenuState _menuState;
-    
-    // Have it animate via code
-    //   hover up and down
-    //     david mentioned using a sine wave that is slightly offset between x and y
-    //   slightly change size? expand/contract?
-    //   Check what minish-cap/link-to-the-past or whatever does and emulate that
 
     // Start is called before the first frame update
     void Start()
     {
         _cursorObj = Instantiate(cursor);
-        _cursorObj.transform.position = new Vector3(ZeroIndexXCoord, ZeroIndexYCoord, 0f);
         _menuState = MainMenuState.StartGame;
-        // TODO: Animate cursor. Use an Invoke?
-        //  If use invoke, will need to cancel said invoke when transitioning scene
+        MoveCursorToOption();
     }
 
     // Update is called once per frame
     void Update()
     {
         KeyboardInput();
+    }
+
+    private void AnimateCursor()
+    {
+        // Give the cursor a downwards velocity and then start an invoke which moves it up and down, animating it
+        _cursorRigidbody = _cursorObj.GetComponent<Rigidbody2D>();
+        _cursorRigidbody.velocity = new Vector2(0, -0.5f);
+        InvokeRepeating("FlipAnimationVelocity", 0.5f, 1f);
+    }
+    
+    private void FlipAnimationVelocity()
+    {
+        var currentYVelocity = _cursorRigidbody.velocity.y;
+        _cursorRigidbody.velocity = new Vector2(0, currentYVelocity * -1);
     }
 
     private void KeyboardInput()
@@ -58,6 +64,7 @@ public class MainMenuController : MonoBehaviour
             {
                 case MainMenuState.StartGame:
                     GameController gameController = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+                    CancelInvoke();
                     gameController.TransitionScene(1);
                     break;
                 case MainMenuState.Quit:
@@ -97,6 +104,8 @@ public class MainMenuController : MonoBehaviour
     private void MoveCursorToOption()
     {
         float newY = ZeroIndexYCoord - 1.65f * (float)_menuState;
+        CancelInvoke();
         _cursorObj.transform.position = new Vector3(ZeroIndexXCoord, newY, 0f);
+        AnimateCursor();
     }
 }
