@@ -11,6 +11,7 @@ public class HUDController : MonoBehaviour
     private static TextMeshProUGUI _healthText;
     private static TextMeshProUGUI _rupeeText;
     private static TextMeshProUGUI _scoreText;
+    private static TextMeshProUGUI _deathText;
 
     private void Awake()
     {
@@ -20,6 +21,8 @@ public class HUDController : MonoBehaviour
             _healthText = gameObject.transform.Find("Health").gameObject.GetComponent<TextMeshProUGUI>();
             _rupeeText = gameObject.transform.Find("Rupees").gameObject.GetComponent<TextMeshProUGUI>();
             _scoreText = gameObject.transform.Find("Score").gameObject.GetComponent<TextMeshProUGUI>();
+            _deathText = gameObject.transform.Find("DeathText").gameObject.GetComponent<TextMeshProUGUI>();
+            _deathText.enabled = false;
         }
         else
         {
@@ -39,6 +42,11 @@ public class HUDController : MonoBehaviour
         
     }
 
+    internal void PlayerDies()
+    {
+        _deathText.enabled = true;
+    }
+    
     internal void SetRupeeText(int numOfRupees)
     {
         _rupeeText.text = $"<sprite=\"items\" name=\"green-rupee\">   {numOfRupees}";

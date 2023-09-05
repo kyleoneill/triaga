@@ -43,7 +43,7 @@ public class PlayerController : MobController
     {
         if (_locked) return;
         PlayerMoveKeyboard();
-        AnimatePlayer();   
+        AnimatePlayer();
     }
 
     private void PlayerMoveKeyboard()
@@ -84,5 +84,7 @@ public class PlayerController : MobController
     internal void Die()
     {
         _sr.sprite = deathSprite;
+        GameController.Instance.setPlayerState(GameController.GameState.Dead);
+        _hudController.PlayerDies();
     }
 }

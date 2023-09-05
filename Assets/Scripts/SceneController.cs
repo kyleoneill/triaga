@@ -77,4 +77,9 @@ public class SceneController : MonoBehaviour
         _random = new Random(1);
         isRunning = true;
     }
+
+    public void StopScene()
+    {
+        isRunning = false;
+    }
 }

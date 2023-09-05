@@ -19,8 +19,6 @@ public class MainMenuController : MonoBehaviour
 
     private MainMenuState _menuState;
     
-    // Have the cursor that hovers to the left of what option we are at controlled by this script
-    // Move it up/down to indicate which option is being selected
     // Have it animate via code
     //   hover up and down
     //     david mentioned using a sine wave that is slightly offset between x and y
@@ -63,6 +61,15 @@ public class MainMenuController : MonoBehaviour
                     gameController.TransitionScene(1);
                     break;
                 case MainMenuState.Quit:
+                    // This is a preprocessor directive
+                    // The UnityEditor.blabla code will only be included if being compiled in the unity editor
+                    // which is important as UnityEditor is not available in a built game and building with this line
+                    // present will cause a compilation failure. Similarly, Application.Quit does nothing when called
+                    // in the editor and only works in a built game, so we need the UnityEditor line when 
+                    // running this switch case in the editor
+                    #if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+                    #endif
                     Application.Quit(0);
                     break;
             }
