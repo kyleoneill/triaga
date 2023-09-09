@@ -64,13 +64,17 @@ public class MobController : MonoBehaviour
 
     protected void FireProjectile()
     {
-        // GameObject projectile, Vector3 position, float boxColliderSize, bool firingUp, float attackCooldown, bool isFromPlayer
-        // _attackController.ProjectileAttack(projectile, transform.position, _boxCollider.size.y, false, 0f, false);
-        var newProjectile = Instantiate(projectile, transform.position, Quaternion.identity);
+        // The _boxCollider for an enemy can be null if the enemy dies mid animation, so we need to make sure
+        // that it still exists here
+        if (_boxCollider == null || transform == null) return;
+        float boxColliderYSize = _boxCollider.size.y;
+        Vector3 transformPosition = transform.position;
+        
+        var newProjectile = Instantiate(projectile, transformPosition, Quaternion.identity);
         ProjectileController projectileController = newProjectile.GetComponent<ProjectileController>();
         // TODO: Will the player ever fire down, will NPCs ever fire up? Can firingUp be removed and we just use isPlayer instead?
         bool firingUp = _isPlayer;
-        projectileController.InstantiateProjectile(transform.position, _boxCollider.size.y, firingUp, _isPlayer);
+        projectileController.InstantiateProjectile(transformPosition, boxColliderYSize, firingUp, _isPlayer);
         if (attackCooldown == 0f) return;
         _attackState = AttackState.Cooldown;
         Invoke(nameof(ResetAttack), attackCooldown);
