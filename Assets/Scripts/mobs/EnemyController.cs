@@ -85,13 +85,15 @@ public class EnemyController : MobController
         _animator.Play("Shooting");
     }
 
-    protected override void BeginDeath()
+    public override void BeginDeath()
     {
+        _locked = true;
         // Delete our collider, this stops the explosion animation from eating arrows and BeginDeath from being called
         // while the enemy is already dying (and spawning multiple loot instances)
         Destroy(_boxCollider);
         
         SpawnLoot();
+        _animator.StopPlayback();
         _animator.Play("Explosion");
     }
 

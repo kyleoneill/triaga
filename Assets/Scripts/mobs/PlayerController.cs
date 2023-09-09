@@ -63,7 +63,7 @@ public class PlayerController : MobController
             _animator.Play("Standing");
     }
 
-    protected override void BeginDeath()
+    public override void BeginDeath()
     {
         // The end of the death animation calls Die
         _animator.Play("Die");

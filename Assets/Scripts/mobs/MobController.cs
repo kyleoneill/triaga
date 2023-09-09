@@ -90,7 +90,7 @@ public class MobController : MonoBehaviour
         return _attackState == AttackState.NotAttacking;
     }
     
-    protected virtual void BeginDeath()
+    public virtual void BeginDeath()
     {
         throw new NotImplementedException();
     }

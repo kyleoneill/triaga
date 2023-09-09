@@ -39,6 +39,7 @@ public class SceneController : MonoBehaviour
 
     private void SpawnEnemy()
     {
+        if (!isRunning) return;
         // Choose an enemy to spawn, spawn them
         int newEnemyIndex = _random.NextInt(0, SpawnableEnemies.Length);
         GameObject enemyPrefab = SpawnableEnemies[newEnemyIndex];
@@ -58,9 +59,8 @@ public class SceneController : MonoBehaviour
 
     public void KillEnemy(int score)
     {
+        if (!isRunning) return;
         _currentEnemyCount -= 1;
-        // TODO: This increments score when an enemy kills another enemy
-        // Need to use some other way to record killing an enemy as only the player
         _totalEnemiesKilled += 1;
         _score += score;
         _hudController.SetScoreText(_score);
@@ -81,5 +81,11 @@ public class SceneController : MonoBehaviour
     public void StopScene()
     {
         isRunning = false;
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            EnemyController enemyController = enemy.GetComponent<EnemyController>();
+            enemyController.BeginDeath();
+        }
     }
 }
