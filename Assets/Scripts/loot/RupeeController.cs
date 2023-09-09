@@ -21,10 +21,7 @@ public class RupeeController : MonoBehaviour
     [SerializeField] private AnimatorController BlueAnimator;
     [SerializeField] private AnimatorController RedAnimator;
 
-    [SerializeField] private float DespawnTime;
-    
     private SpriteRenderer _sr;
-    private Renderer _renderer;
     private Animator _animator;
     private RupeeType _rupeeType;
     private int _value;
@@ -33,7 +30,6 @@ public class RupeeController : MonoBehaviour
     {
         _sr = gameObject.GetComponent<SpriteRenderer>();
         _animator = gameObject.GetComponent<Animator>();
-        _renderer = gameObject.GetComponent<Renderer>();
         SetRupeeType();
         switch (_rupeeType)
         {
@@ -87,21 +83,9 @@ public class RupeeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InvokeRepeating(nameof(FlickerSprite), DespawnTime, 0.25f);
-        Invoke(nameof(Despawn), DespawnTime + 5f);
+        
     }
 
-    void FlickerSprite()
-    {
-        _renderer.enabled = !_renderer.enabled;
-    }
-
-    public void Despawn()
-    {
-        CancelInvoke();
-        Destroy(gameObject);
-    }
-    
     // Update is called once per frame
     void Update()
     {

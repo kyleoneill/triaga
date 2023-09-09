@@ -106,6 +106,7 @@ public class EnemyController : MobController
         // Might need to refactor RupeeController into a generic LootController and roll rupee
         // logic into it. Need overlapping logic, like flashing when about to de-spawn and then de-spawning
         // TODO: An enemy should not always drop loot, there should be a chance roll here
+        // TODO: Hearts spawn a little too often, it's a 50/50 between a heart and one of the 3 rupee types
         int i = Random.Range(0, loot.Length);
         var item = Instantiate(loot[i], gameObject.transform.position, Quaternion.identity);
         item.name = loot[i].name;

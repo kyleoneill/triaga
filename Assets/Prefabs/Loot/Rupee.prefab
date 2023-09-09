@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5277312753227744324}
   - component: {fileID: -4169088986444099467}
   - component: {fileID: -3715555965425459494}
+  - component: {fileID: -6966032156270911165}
   - component: {fileID: -909552347931624767}
   - component: {fileID: -1867896034939818949}
   - component: {fileID: 6607924988200902057}
@@ -108,6 +109,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &-6966032156270911165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5277312753227744325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee55b36acfdf9e447be83681f552bf7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DespawnTime: 10
 --- !u!114 &-909552347931624767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,7 +140,6 @@ MonoBehaviour:
   GreenAnimator: {fileID: 9100000, guid: 7d2fd8ecbce4f4747bacbf31de3672fe, type: 2}
   BlueAnimator: {fileID: 9100000, guid: cd1d0024e6e5efb4181a4a208b062fab, type: 2}
   RedAnimator: {fileID: 9100000, guid: 1225cc5ac57008f438262b30e3054e05, type: 2}
-  DespawnTime: 10
 --- !u!61 &-1867896034939818949
 BoxCollider2D:
   m_ObjectHideFlags: 0

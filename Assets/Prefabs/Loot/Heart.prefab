@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4845154767140211585}
   - component: {fileID: 5247753584045035122}
   - component: {fileID: -5899539769808308835}
+  - component: {fileID: 4441652192331877444}
   m_Layer: 0
   m_Name: Heart
   m_TagString: loot
@@ -133,3 +134,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.4375}
   m_EdgeRadius: 0
+--- !u!114 &4441652192331877444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4845154767140211598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee55b36acfdf9e447be83681f552bf7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DespawnTime: 10

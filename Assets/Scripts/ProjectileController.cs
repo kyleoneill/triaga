@@ -86,19 +86,20 @@ public class ProjectileController : MonoBehaviour
         if (other.gameObject.CompareTag("loot") && _isFromPlayer)
         {
             PlayerController player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            LootController lootController = other.gameObject.GetComponent<LootController>();
             switch (other.gameObject.name)
             {
                 case "Rupee":
                     RupeeController rupeeController = other.gameObject.GetComponent<RupeeController>();
                     int rupeeValue = rupeeController.GetRupeeValue();
-                    rupeeController.Despawn();
+                    lootController.Despawn();
                     player.UpdateRupees(rupeeValue);
                     break;
                 case "Heart":
                     if (!player.IsMaxHealth())
                     {
                         player.Heal(1);
-                        Destroy(other.gameObject);
+                        lootController.Despawn();
                     }
                     break;
                 default:
